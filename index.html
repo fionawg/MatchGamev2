@@ -1,0 +1,245 @@
+<!--Fiona Wang, Web Dev Period 7+8 Section 85, Jan 5, Match Game Version 2-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Game</title>
+    <style>
+        * {
+            padding: 0px;
+            text-align: center;
+        }
+
+        .container {
+            display: grid;
+            justify-content: center;
+            justify-items: center;
+        }
+
+        img {
+            border: 5px solid rgb(85, 85, 85);
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                grid-template-columns: repeat(4, 110px);
+                grid-template-rows: repeat(4, 110px);
+            }
+
+            img {
+                max-width: 110px;
+                max-height: 110px;
+            }
+        }
+
+        @media (min-width: 701px) and (max-width: 870px) {
+            .container {
+                grid-template-columns: repeat(4, 150px);
+                grid-template-rows: repeat(4, 150px);
+            }
+
+            img {
+                max-width: 150px;
+                max-height: 150px;
+            }
+        }
+
+        @media (min-width: 871px) {
+            .container {
+                grid-template-columns: repeat(4, 190px);
+                grid-template-rows: repeat(4, 190px);
+            }
+
+            img {
+                max-width: 190px;
+                max-height: 190px;
+            }
+        }
+    </style>
+    <script>
+        /* Changes that I made:
+        1. Included alt text for my images and made it change accordingly.
+        2. 
+        3. 
+        4. 
+        5. 
+        */
+
+        let s = 0;
+        let first = 0;
+        let second = 0;
+        let count = 1;
+
+        const lowScore = ["Wow! You're doing great!",
+            "Good job!",
+            "This is easy for you!",
+            "You're a pro!",
+            "Easy peasy lemon squeezy!"];
+        const mediumScore = ["You're right there!",
+            "Almost done!",
+            "Come on!",
+            "Just a few more!",
+            "Almost there! Don't give up!"];
+        const highScore = ["Maybe you should reset this game...",
+            "Your memory needs some work.",
+            "I can't watch this.",
+            "Someone save my eyes.",
+            "A goldfish could do better."];
+
+        function initialize() {
+            score = document.getElementById("gameScore");
+            score.innerHTML = s;
+            message = document.getElementById("message");
+            message.innerHTML = "Messages about your score will appear here!"
+        }
+
+        function changeImage(num) {
+            temp = document.getElementById(num);
+            if (temp.src.indexOf("question") != -1) {
+                if (count === 1) {
+                    s++;
+                    score.innerHTML = s;
+                    num = num.slice(0, 1);
+                    first = temp;
+                    first.src = "imgs/" + num + ".jpg";
+                    if (num === '1') {
+                        console.log("works");
+                        first.alt = "iceberg with a dark blue background";
+                    } else if (num === '2') {
+                        first.alt = "dark sunset over water";
+                    } else if (num === '3') {
+                        first.alt = "half moon";
+                    } else if (num === '4') {
+                        first.alt = "arch of rocks over a canyon";
+                    } else if (num === '5') {
+                        first.alt = "dock next to water";
+                    } else if (num === '6') {
+                        first.alt = "bridge in a forest";
+                    } else if (num === '7') {
+                        first.alt = "view of ocean and sand";
+                    } else if (num === '8') {
+                        first.alt = "palm trees next to a wall";
+                    }
+                    count++;
+                } else if (count === 2) {
+                    s++;
+                    score.innerHTML = s;
+                    num = num.slice(0, 1);
+                    second = temp;
+                    second.src = "imgs/" + num + ".jpg";
+                    if (num === '1') {
+                        second.alt = "iceberg with a dark blue background";
+                    } else if (num === '2') {
+                        second.alt = "dark sunset over water";
+                    } else if (num === '3') {
+                        second.alt = "half moon";
+                    } else if (num === '4') {
+                        second.alt = "arch of rocks over a canyon";
+                    } else if (num === '5') {
+                        second.alt = "dock next to water";
+                    } else if (num === '6') {
+                        second.alt = "bridge in a forest";
+                    } else if (num === '7') {
+                        second.alt = "view of ocean and sand";
+                    } else if (num === '8') {
+                        second.alt = "palm trees next to a wall";
+                    }
+                    count = 1;
+                    setTimeout(function () {
+                        if (first.src !== second.src) {
+                            first.src = "imgs/question.png";
+                            second.src = "imgs/question.png";
+                            first.alt = "question mark";
+                            second.alt = "question mark";
+                        }
+                    }, 400);
+                    genMessage();
+                    if (s >= 16) {
+                        boo = true;
+                        elements = Array.from(document.querySelectorAll("img"));
+                        for (let i = 0; i < elements.length; i++) {
+                            temp = elements[i];
+                            if (temp.src.indexOf("question") !== -1) {
+                                boo = false;
+                            }
+                        }
+                        if (boo) {
+                            score.innerHTML = "YOU WON WITH A SCORE OF " + s + "!! CLICK RESET TO PLAY AGAIN!";
+                        }
+                    }
+                }
+            }
+        }
+
+        function genMessage() {
+            rand = Math.floor(Math.random() * 4);
+            if (s <= 15) {
+                message.innerHTML = lowScore[rand];
+            } else if (s < 28) {
+                message.innerHTML = mediumScore[rand];
+            } else {
+                message.innerHTML = highScore[rand];
+            }
+        }
+
+        function reset() {
+            elements = Array.from(document.querySelectorAll("img"));
+            for (let i = 0; i < elements.length; i++) {
+                temp = elements[i];
+                temp.src = "imgs/question.png";
+                temp.alt = "question mark";
+            }
+            s = 0;
+            score.innerHTML = s;
+            message.innerHTML = "Messages about your score will appear here!"
+        }
+    </script>
+</head>
+
+<body onload="initialize();">
+    <h1>Match Game</h1>
+    <p>Instructions:</p>
+    <ul>
+        <li>There are 16 images on the grid below.</li>
+        <li>Click a "?" to reveal an image and try to find the match.</li>
+        <li>If the images don't match, wait until they go back to question marks before clicking again.</li>
+        <li>Each click adds 1 to your score.</li>
+        <li>Oh, also random messages are generated above your score!</li>
+        <li>Have fun!</li>
+    </ul>
+
+    <br />
+
+    <div class="container">
+        <img id="11" src="imgs/question.png" alt="question mark" onclick="changeImage('11');">
+        <img id="31" src="imgs/question.png" alt="question mark" onclick="changeImage('31');">
+        <img id="41" src="imgs/question.png" alt="question mark" onclick="changeImage('41');">
+        <img id="81" src="imgs/question.png" alt="question mark" onclick="changeImage('81');">
+        <img id="82" src="imgs/question.png" alt="question mark" onclick="changeImage('82');">
+        <img id="61" src="imgs/question.png" alt="question mark" onclick="changeImage('61');">
+        <img id="51" src="imgs/question.png" alt="question mark" onclick="changeImage('51');">
+        <img id="21" src="imgs/question.png" alt="question mark" onclick="changeImage('21');">
+        <img id="12" src="imgs/question.png" alt="question mark" onclick="changeImage('12');">
+        <img id="42" src="imgs/question.png" alt="question mark" onclick="changeImage('42');">
+        <img id="71" src="imgs/question.png" alt="question mark" onclick="changeImage('71');">
+        <img id="32" src="imgs/question.png" alt="question mark" onclick="changeImage('32');">
+        <img id="22" src="imgs/question.png" alt="question mark" onclick="changeImage('22');">
+        <img id="72" src="imgs/question.png" alt="question mark" onclick="changeImage('72');">
+        <img id="52" src="imgs/question.png" alt="question mark" onclick="changeImage('52');">
+        <img id="62" src="imgs/question.png" alt="question mark" onclick="changeImage('62');">
+    </div>
+
+    <br />
+
+    <h3 id="message"></h3>
+    <h2>Score: <span id="gameScore">0</span></h2>
+    <button onclick="reset();">Reset</button>
+
+    <br /><br />
+</body>
+
+</html>
